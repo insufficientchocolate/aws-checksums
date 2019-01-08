@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.1)
 project (aws-checksums C)
+option(BUILD_JNI_BINDINGS "build jni bindings" OFF)
 
 file(GLOB AWS_CHECKSUMS_HEADERS
      "include/aws/checksums/*.h"
@@ -121,10 +122,12 @@ install(EXPORT "${CMAKE_PROJECT_NAME}-targets"
     DESTINATION "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/"
     NAMESPACE AWS::)
 
-configure_file("cmake/${CMAKE_PROJECT_NAME}-config.cmake"
+include(CMakePackageConfigHelpers)
+set(config_dir "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/")
+configure_package_config_file("cmake/${CMAKE_PROJECT_NAME}-config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake"
-    @ONLY)
+    INSTALL_DESTINATION "${config_dir}")
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake"
-    DESTINATION "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/")
+    DESTINATION "${config_dir}")
 
